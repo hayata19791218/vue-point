@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vueで作った数当て</title>
+    </head>
+    <body>
+        <div id="app">
+            <div class="wrap">
+                <div v-if="btn">
+                    <h2>数当てゲーム</h2>
+                    <p>選んだ数字とランダム数字が一致すると選んだ数字をポイントに加算。<br/>はずれると選んだ数字の分、ポイントが減ります。</p>
+                    <div>
+                        <dl>
+                        <dt class="random">{{question}}</dt>
+                        <dd>
+                            <button @click="choice(1)">1</button>
+                            <button @click="choice(2)">2</button>
+                            <button @click="choice(3)">3</button>
+                        </dd>
+                        </dl>
+                        <p>ボタンを押せるのはあと{{turn}}回です</p>
+                    </div>
+                    <dl>
+                        <dt>あなたのポイント</dt>
+                        <dd class="point">{{myPoint}}</dd>
+                    </dl>
+                </div>
+                <div 
+                    class="reset"
+                    v-else
+                >
+                    <dl>
+                        <dt>あなたのポイント</dt>
+                        <dd class="point">{{myPoint}}</dd>
+                    </dl>
+                    <button 
+                        class="button"
+                        @click="reset"
+                    >リセット</button>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js"></script>
+        <script>
+            var app = new Vue({
+                el: '#app',
+                data:{
+                    question:'?',
+                    turn:10,
+                    myPoint:0,
+                    btn:true
+                },
+                methods:{
+                    choice:function(clickPoint){
+                        const randomArray = [1,2,3]
+                        const randomPoint = Math.floor(Math.random()*randomArray.length);
+                        if(clickPoint == randomArray[randomPoint]){
+                            this.myPoint += clickPoint;
+                        }else{
+                            this.myPoint -= clickPoint;
+                        }
+                        this.turn --;
+                        if(this.turn == 0){
+                            this.btn = false;
+                        }
+                    },
+                    reset:function(){
+                        this.btn = true;
+                        this.question = '?';
+                        this.turn = '10';
+                        this.myPoint = 0;
+                    }
+                }
+               
+            })
+        </script>
+        <style>
+            h2{
+            text-align: center;
+            font-size: 20px;
+            }
+            body {
+                text-align: center;
+            }
+            .random {
+                font-size: 3em;
+            }
+            .point {
+                font-size: 3em;
+                line-height: 1;
+                margin-top: 0;
+            }
+            dl {
+                border: 4px solid #ddd;
+                padding: 10px;
+                width: 240px;
+                margin: 1em auto;
+            }
+            dl.is-correct {
+                border-color: blue;
+                color: blue;
+            }
+            dl.is-incorrect {
+                border-color: red;
+                color: red;
+            }
+            dd {
+                margin: 0;
+                font-weight: bold;
+            }
+            .is-minus {
+                color: red;
+            }
+            .reset{
+                margin-top: 100px;
+            }
+            .button{
+                background-color:skyblue;
+                padding: 10px;
+                color:#fff;
+                margin: 40px auto 0;
+                display: block;
+                width: 100px;
+                text-align: center;
+                border-radius:10px;
+                border:none;
+            }
+        </style>
+    </body>
+</html>
